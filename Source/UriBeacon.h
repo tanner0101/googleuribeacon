@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-#import <UriBeacon/UBUriBeaconScanner.h>
-#import <UriBeacon/UBUriBeacon.h>
-#import <UriBeacon/UBConfigurableUriBeacon.h>
+#import "UBUriBeaconScanner.h"
+#import "UBUriBeacon.h"
+#import "UBConfigurableUriBeacon.h"
