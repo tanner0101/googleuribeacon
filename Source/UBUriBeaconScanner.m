@@ -161,9 +161,18 @@ static stateChange stateGraph[] = {
       [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
   [_configurableBeaconsCentralManager setDelegate:self];
 
-  BOOL applicationActive =
-      [[UIApplication sharedApplication] applicationState] ==
-      UIApplicationStateActive;
+  #ifndef TARGET_IS_EXTENSION
+    BOOL applicationActive = YES;
+    UIApplication *sharedApplication = nil;
+    NSLog(@"Extension");
+#else
+    UIApplication *sharedApplication = [UIApplication sharedApplication];
+    BOOL applicationActive =
+    [[UIApplication sharedApplication] applicationState] ==
+    UIApplicationStateActive;
+    NSLog(@"Application");
+#endif
+    
   _bluetoothOnOrConnected =
       [_beaconsCentralManager state] == CBCentralManagerStatePoweredOn;
   if (applicationActive && _bluetoothOnOrConnected) {
@@ -180,12 +189,14 @@ static stateChange stateGraph[] = {
       addObserver:self
          selector:@selector(_didBecomeActive:)
              name:UIApplicationDidBecomeActiveNotification
-           object:[UIApplication sharedApplication]];
+           object: sharedApplication];
   [[NSNotificationCenter defaultCenter]
       addObserver:self
          selector:@selector(_willResignActive:)
              name:UIApplicationWillResignActiveNotification
-           object:[UIApplication sharedApplication]];
+           object: sharedApplication];
+
+  
   _beacons = [NSMutableArray array];
   _configurableBeacons = [NSMutableArray array];
 
