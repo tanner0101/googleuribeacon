@@ -161,16 +161,20 @@ static stateChange stateGraph[] = {
       [[CBCentralManager alloc] initWithDelegate:self queue:nil options:nil];
   [_configurableBeaconsCentralManager setDelegate:self];
 
-#ifndef TARGET_IS_EXTENSION
+#ifdef TARGET_IS_APP
     UIApplication *sharedApplication = [UIApplication sharedApplication];
     BOOL applicationActive =
     [[UIApplication sharedApplication] applicationState] ==
     UIApplicationStateActive;
     NSLog(@"Application");
-#else
-    UIApplication *sharedApplication = nil;
+#elif TARGET_IS_EXTENSION
     BOOL applicationActive = YES;
+    UIApplication *sharedApplication = nil;
     NSLog(@"Extension");
+#else
+    BOOL applicationActive = YES;
+    UIApplication *sharedApplication = nil;
+    NSLog(@"NEITHER");
 #endif
     
   _bluetoothOnOrConnected =
